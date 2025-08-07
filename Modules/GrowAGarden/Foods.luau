@@ -1,6 +1,5 @@
 local Recipes = {}
-
-	local Food: { [string]: { [string]: { [string]: number } } } = {
+local Food: { [string]: { [string]: { [string]: number } } } = {
 		['Soup'] = {
 			['Very Common'] = {
 				['Carrot'] = 1,
