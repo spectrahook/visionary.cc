@@ -1,4 +1,4 @@
-local Recipes = require(path.to.RecipesModule)
+local Recipes = loadstring(game:HttpGet("https://raw.githubusercontent.com/spectrahook/visionary.cc/refs/heads/main/Modules/GrowAGarden/Foods.luau",true))()
 local FoodHelper = {}
 function FoodHelper.GetIngredients(FoodName: string, Rarity: string): { [string]: number }?
 	local Data = Recipes.Food[FoodName]
