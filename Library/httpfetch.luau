@@ -1,17 +1,24 @@
-local fetch = {};
+
+local fetch = {}
 
 function fetch.load(url: string)
-	local Attempt: number = 0;
+	local Attempt: number = 0
 	while Attempt < 3 do
-		Attempt += 1;
+		Attempt += 1
 		local success, result = pcall(function()
-			return game:HttpGet(url);
+			return game:HttpGet(url, true)
 		end)
 		if success then
-			loadstring(result)();
-			return;
+			local fn, err = loadstring(result)
+			if not fn then
+				error('Loadstring error: ' .. tostring(err))
+			end
+			fn()
+			return
 		end
-		task.wait();
+		task.wait(1) -- uhh idk
 	end
-	error('Games not found or failed to load after 3 attempts.');
+	error('Fetch failed after 3 attempts: ' .. url)
 end
+
+return fetch
