@@ -16,7 +16,7 @@ function fetch.load(url: string)
 			fn()
 			return
 		end
-		task.wait(1) -- uhh idk
+		task.wait() -- uhh idk
 	end
 	error('Fetch failed after 3 attempts: ' .. url)
 end
