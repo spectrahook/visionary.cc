@@ -10,7 +10,7 @@ local Games: string = Repository .. 'Games/'
 local Library: string = Repository .. 'Library/'
 
 local Libraries = {}
-local function import(url: string)
+local function Import(url: string)
 	if not Libraries[url] then
 		local src = game:HttpGet(url, true)
 		Libraries[url] = loadstring(src)()
@@ -18,7 +18,7 @@ local function import(url: string)
 	return Libraries[url]
 end
 
-local fetch = import(Library .. 'httpfetch.luau')
+local fetch = Import(Library .. 'httpfetch.luau')
 
 for _, v in pairs(GameList) do
 	if PlaceId == v.PlaceId then
