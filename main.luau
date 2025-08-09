@@ -4,6 +4,8 @@ local GameList = {
 	};
 };
 
+loadstring(game:HttpGet('https://raw.githubusercontent.com/spectrahook/visionary.cc/refs/heads/main/Library/httpfetch.luau',true))()
+
 local PlaceId: number = game.PlaceId;
 local Repository: string = 'https://raw.githubusercontent.com/spectrahook/visionary.cc/refs/heads/main/';
 local Games: string = Repository .. 'Games/';
