@@ -10,12 +10,12 @@ local Games: string = Repository .. 'Games/'
 local Library: string = Repository .. 'Library/'
 
 local Libraries = {}
-local function import(LibName: string)
-	if not Libraries[LibName] then
-		local src = game:HttpGet(Repository .. LibName, true)
-		Libraries[LibName] = loadstring(src)()
+local function import(url: string)
+	if not Libraries[url] then
+		local src = game:HttpGet(url, true)
+		Libraries[url] = loadstring(src)()
 	end
-	return Libraries[LibName]
+	return Libraries[url]
 end
 
 local fetch = import(Library .. 'httpfetch.luau')
