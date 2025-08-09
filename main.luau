@@ -18,7 +18,7 @@ local function import(LibName: string)
 	return Libraries[LibName]
 end
 
-local fetch = import("{Library}httpfetch.luau')
+local fetch = import('{Library}httpfetch.luau')
 
 for _, data in pairs(GameList) do
 	if PlaceId == data.PlaceId then
