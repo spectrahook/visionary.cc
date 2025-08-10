@@ -13,7 +13,7 @@ local Games: string = Repository .. 'Games/'
 local Library: string = Repository .. 'Library/'
 
 local Libraries = {}
-local function Import(url: string)
+function Import(url: string)
 	if not Libraries[url] then
 		local src = game:HttpGet(url, true)
 		Libraries[url] = loadstring(src)()
