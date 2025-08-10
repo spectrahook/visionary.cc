@@ -8,20 +8,22 @@ else
     warn("[Visionary.cc] Modules failed to load")
 end
 
-local Players = Services.Players
-local ReplicatedStorage = Services.ReplicatedStorage
+local Players = Services.Players;
+local ReplicatedStorage = Services.ReplicatedStorage;
 
-local LocalPlayer = Players.LocalPlayer
-local PlayerGui = LocalPlayer.PlayerGui
+local LocalPlayer = Players.LocalPlayer;
+local PlayerGui = LocalPlayer.PlayerGui;
 
-local PoopUI = PlayerGui.PoopUI
-local Cursor = PoopUI.PoopAreaCursor.PoopCursor
-local Area = PoopUI.PoopBar.PoopArea
+local PoopUI = PlayerGui.PoopUI;
+local Cursor = PoopUI.PoopAreaCursor.PoopCursor;
+local Area = PoopUI.PoopBar.PoopArea;
 
-local Tap = ReplicatedStorage.TapButtonTappedEvent
+local Tap = ReplicatedStorage.TapButtonTappedEvent;
+local BigPoop = ReplicatedStorage.BigPoopAnimation;
 
 local Settings = {
-Minigame = false;
+    Minigame = false;
+    Notify = false;
 }
 
 local WindUI = loadstring(game:HttpGet('https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua'))();
@@ -38,21 +40,31 @@ local Window = WindUI:CreateWindow({
 local Main = Window:Section({ Title = 'Farming', Opened = true });
 local Pooping = Main:Tab({ Title = 'Pooping', Icon = 'mouse-pointer-click' })
 
+
 Pooping:Toggle({
     Title = 'Auto Minigame';
     Value = false;
     Callback = function(state)
-            Settings.Minigame = state
-            if state then
-            repeat
-                task.wait()
-                if PoopUI.Enabled then
-                    Area.Position = UDim2.new(Cursor.Position.X.Scale,Area.Position.X.Offset,Area.Position.Y.Scale,Area.Position.Y.Offset)
-                    Tap:Fire()
-                end
-            until not Settings.Minigame
-            end
+        Settings.Minigame = state
+        if v then
+        repeat
+        Area.Position = UDim2.new(Cursor.Position.X.Scale,Area.Position.X.Offset,Area.Position.Y.Scale,Area.Position.Y.Offset)
+        Tap:Fire()
+        until not Settings.Minigame
+        end
     end
 })
 
- 
+Pooping:Toggle({
+    Title = 'Notify Big Poop';
+    Value = false;
+    Callback = function(state)
+        Settings.Notify = state
+    end
+})
+
+BigPoopAnimation.OnClientEvent:Connect(function()
+        if Settings.Notify then
+            WindUI:Notify{(Title = 'INFORMATION', Content = 'You got big poop', Image = 'bell'})
+        end
+    end)
