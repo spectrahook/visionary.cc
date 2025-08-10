@@ -42,13 +42,16 @@ Pooping:Toggle({
     Title = 'Auto Minigame';
     Value = false;
     Callback = function(state)
-        Settings.Minigame = state
-        if v then
-        repeat
-        Area.Position = UDim2.new(Cursor.Position.X.Scale,Area.Position.X.Offset,Area.Position.Y.Scale,Area.Position.Y.Offset)
-        Tap:Fire()
-        until not Settings.Minigame
-        end
+            Settings.Minigame = state
+            if state then
+            repeat
+                task.wait()
+                if PoopUI.Enabled then
+                    Area.Position = UDim2.new(Cursor.Position.X.Scale,Area.Position.X.Offset,Area.Position.Y.Scale,Area.Position.Y.Offset)
+                    Tap:Fire()
+                end
+            until not Settings.Minigame
+            end
     end
 })
 
