@@ -1,4 +1,3 @@
-# visionary.cc
 
 # Information
 *- Please read the license.*
