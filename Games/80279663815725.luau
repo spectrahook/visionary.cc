@@ -14,7 +14,7 @@ local WorkoutClick: ImageButton = PlayerGui.WorkoutOverlay.BG.TapButton;
 local WorkoutModule = require(Workspace.Src.WorkoutHandler);
 local OldStamina = WorkoutModule.ReachedZeroStamina;
 
-local WindUI = loadstring(game:HttpGet('https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua'))();
+local WindUI = fetch.load('https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua');
 WindUI.TransparencyValue = 0.8;
 WindUI:SetTheme('Indigo')
 
