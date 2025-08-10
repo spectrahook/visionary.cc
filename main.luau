@@ -1,7 +1,10 @@
 local GameList = {
 	PrisonPump = {
 		PlaceId = 80279663815725;
-	};
+	},
+	['Fish It'] = {
+		PlaceId = 121864768012064;
+	}
 }
 
 local PlaceId: number = game.PlaceId
