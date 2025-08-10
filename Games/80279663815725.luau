@@ -4,6 +4,7 @@ local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/rel
 
 local Modules: string = 'https://raw.githubusercontent.com/spectrahook/visionary.cc/refs/heads/main/Modules/'
 local Services = Import(Modules .. 'Misc/Services.luau')
+print('[Visionary] All modules has loaded')
 
 local Window = WindUI:CreateWindow({
 	Title = "Visionary.cc | Prison Pump",
@@ -49,7 +50,7 @@ local Config = {
 	},
 }
 
-local Workout = Click:Toggle({
+local Workout = Main:Toggle({
 	Title = "Auto Workout",
 	Desc = "Automatically perform workouts to gain strength.",
 	Type = "Checkbox",
@@ -59,7 +60,7 @@ local Workout = Click:Toggle({
 	end,
 })
 
-local Fight = Click:Toggle({
+local Fight = Main:Toggle({
 	Title = "Auto Fight",
 	Desc = "Automatically engage in fights to level up.",
 	Type = "Checkbox",
