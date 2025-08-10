@@ -1,10 +1,10 @@
 -- PrisonPump.luau
 
+local _VNY = shared
+
 local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
-local Modules: string = 'https://raw.githubusercontent.com/spectrahook/visionary.cc/refs/heads/main/Modules/'
-local Services = Import(Modules .. 'Misc/Services.luau')
-print('[Visionary] All modules has loaded')
+local Services = Import(_VNY.Modules .. 'Misc/Services.luau')
 
 local Window = WindUI:CreateWindow({
 	Title = "Visionary.cc | Prison Pump",
@@ -50,22 +50,26 @@ local Config = {
 	},
 }
 
-local Workout = Main:Toggle({
+local Workout = Click:Toggle({
 	Title = "Auto Workout",
 	Desc = "Automatically perform workouts to gain strength.",
+	Icon = "bird",
 	Type = "Checkbox",
 	Default = false,
 	Callback = function(state: boolean)
+		print("Auto Workout toggled:", state)
 		Config.Clicking.Workout = state
 	end,
 })
 
-local Fight = Main:Toggle({
+local Fight = Click:Toggle({
 	Title = "Auto Fight",
 	Desc = "Automatically engage in fights to level up.",
+	Icon = "bird",
 	Type = "Checkbox",
 	Default = false,
 	Callback = function(state: boolean)
+		print("Auto Fight toggled:", state)
 		Config.Clicking.Fight = state
 	end,
 })
