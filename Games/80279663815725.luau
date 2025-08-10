@@ -1,75 +1,78 @@
--- PrisonPump.luau
-
 local _VNY = shared
 
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
-
 local Services = Import(_VNY.Modules .. 'Misc/Services.luau')
+local Players: Players = Services.Players
+local Workspace: Workspace = Services.Workspace
+local MarketplaceService: MarketplaceService = Services.MarketplaceService
+local LocalPlayer: Player = Players.LocalPlayer;
+local PlayerGui: PlayerGui = LocalPlayer.PlayerGui;
+
+local FightClick: ImageButton = PlayerGui.FightUI.PrisonFight.BG.TapButton;
+local WorkoutClick: ImageButton = PlayerGui.WorkoutOverlay.BG.TapButton;
+
+local WorkoutModule = require(Workspace.Src.WorkoutHandler);
+local OldStamina = WorkoutModule.ReachedZeroStamina;
+
+local WindUI = loadstring(game:HttpGet('https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua'))();
+WindUI.TransparencyValue = 0.8;
+WindUI:SetTheme('Indigo')
 
 local Window = WindUI:CreateWindow({
-	Title = "Visionary.cc | Prison Pump",
-	Icon = "zap",
-	Author = "liebertsx | discord @liebertsx",
-	Folder = "Visionary.cc",
-	Size = UDim2.fromOffset(580, 460),
-	Transparent = true,
-	Theme = "Indigo",
-	Resizable = true,
-	SideBarWidth = 300,
-	Background = "",
-	BackgroundImageTransparency = 0.42,
-	HideSearchBar = true,
-	ScrollBarEnabled = false,
-	User = {
-		Enabled = true,
-		Anonymous = true,
-		Callback = function()
-			print("clicked")
-		end,
-	},
-})
+    Title = 'Visionary.cc - Prison Pump',
+    Icon = '',
+    Size = UDim2.fromOffset(400, 250),
+    Theme = 'Indigo'
+});
 
-WindUI:SetTheme("Indigo")
+local Main = Window:Section({ Title = 'Farming', Opened = true });
+local Clicking = Main:Tab({ Title = 'Clicking', Icon = 'mouse-pointer-click' });
 
-local Main = Window:Tab({
-	Title = "Main",
-	Icon = "home",
-	Locked = false,
-})
+local Misc = Window:Section({ Title = 'Misc', Opened = true });
+local Vuln = Misc:Tab({ Title = 'Vulnerability', Icon = 'wrench' });
 
-local Click = Main:Section({
-	Title = "Clicking",
-	TextXAlignment = "Left",
-	TextSize = 17,
-})
+local Settings = {
+    Clicking = {
+        Fight = false;
+        Workout = false;
+    };
+    Vulnerability = {
+        InfiniteStamina = false;
+    };
+};
 
-local Config = {
-	Clicking = {
-		Workout = false,
-		Fight = false,
-	},
-}
+Clicking:Toggle({
+    Title = 'Auto Fight';
+    Value = false;
+    Callback = function(state)
+        Settings.Clicking.Fight = state;
+    end;
+});
 
-local Workout = Click:Toggle({
-	Title = "Auto Workout",
-	Desc = "Automatically perform workouts to gain strength.",
-	Icon = "bird",
-	Type = "Checkbox",
-	Default = false,
-	Callback = function(state: boolean)
-		print("Auto Workout toggled:", state)
-		Config.Clicking.Workout = state
-	end,
-})
+Clicking:Toggle({
+    Title = 'Auto Workout';
+    Value = false;
+    Callback = function(state)
+        Settings.Clicking.Workout = state;
+    end;
+});
 
-local Fight = Click:Toggle({
-	Title = "Auto Fight",
-	Desc = "Automatically engage in fights to level up.",
-	Icon = "bird",
-	Type = "Checkbox",
-	Default = false,
-	Callback = function(state: boolean)
-		print("Auto Fight toggled:", state)
-		Config.Clicking.Fight = state
-	end,
-})
+Vuln:Toggle({
+    Title = 'Infinite Stamina';
+    Value = false;
+    Callback = function(state)
+            hookfunction(WorkoutModule.ReachedZeroStamina, function(...)
+                return nil
+            end)      
+    end
+});
+
+task.spawn(function()
+    while task.wait() do
+        if Settings.Clicking.Fight and FightClick.Visible then
+            firesignal(FightClick.Activated);
+        end;
+        if Settings.Clicking.Workout and WorkoutClick.Visible then
+            firesignal(WorkoutClick.Activated);
+        end;
+    end;
+end);
