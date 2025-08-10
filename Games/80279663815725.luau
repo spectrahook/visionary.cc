@@ -6,6 +6,7 @@ local Workspace: Workspace = Services.Workspace
 local MarketplaceService: MarketplaceService = Services.MarketplaceService
 local LocalPlayer: Player = Players.LocalPlayer;
 local PlayerGui: PlayerGui = LocalPlayer.PlayerGui;
+local Lighting = Services.Lighting;
 
 local FightClick: ImageButton = PlayerGui.FightUI.PrisonFight.BG.TapButton;
 local WorkoutClick: ImageButton = PlayerGui.WorkoutOverlay.BG.TapButton;
@@ -60,19 +61,26 @@ Vuln:Toggle({
     Title = 'Infinite Stamina';
     Value = false;
     Callback = function(state)
+            if state then
             hookfunction(WorkoutModule.ReachedZeroStamina, function(...)
                 return nil
             end)      
+            end
     end
 });
 
 task.spawn(function()
     while task.wait() do
         if Settings.Clicking.Fight and FightClick.Visible then
-            firesignal(FightClick.Activated);
-        end;
+            firesignal(FightClick.Activated)
+        end
         if Settings.Clicking.Workout and WorkoutClick.Visible then
-            firesignal(WorkoutClick.Activated);
-        end;
-    end;
-end);
+            firesignal(WorkoutClick.Activated)
+        end
+            for _, v in next, Lighting:GetChildren() do
+                if v.Saturation ~= 0 then
+                    v:Destroy()
+                end
+            end
+    end
+end)
