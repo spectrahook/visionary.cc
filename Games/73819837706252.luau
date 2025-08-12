@@ -25,7 +25,8 @@ local Window = WindUI:CreateWindow({
 local Settings = {
 	AutoCast = false,
 	AutoPerfect = true,
-	AutoReel = false
+	AutoReel = false,
+	AutoSell = false
 }
 
 local FarmingTab = Window:Tab({
@@ -50,12 +51,12 @@ local SellSection = ShopTab:Section({
 	TextSize = 17
 })
 
-local Inventory = Window:Tab({
+local InventoryTab = Window:Tab({
 	Title = "Inventory",
 	Icon = "backpack"
 })
 
-local FavoriteSection = Inventory:Section({
+local FavoriteSection = InventoryTab:Section({
 	Title = "Favorite",
 	TextXAlignment = "Left",
 	TextSize = 17
@@ -104,7 +105,7 @@ ShopTab:Button({
 	Desc = "",
 	Locked = false,
 	Callback = function()
-		local Tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
+		local Tool = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Tool")
 		if Tool then
 			RemoteFunction:InvokeServer("SellHoldingFish", nil, Workspace:GetServerTimeNow())
 		end
@@ -114,24 +115,27 @@ ShopTab:Button({
 ShopTab:Toggle({
 	Title = "Auto Sell Inventory",
 	Type = "Checkbox",
-	Default = false,
+	Default = Settings.AutoSell,
 	Callback = function(Value)
-		task.spawn(function()
-			while Value do
-				RemoteFunction:InvokeServer("SellInventory", nil, Workspace:GetServerTimeNow())
-				task.wait()
-			end
-		end)
+		Settings.AutoSell = Value
 	end
 })
+
+task.spawn(function()
+	while task.wait(1) do
+		if Settings.AutoSell then
+			RemoteFunction:InvokeServer("SellInventory", nil, Workspace:GetServerTimeNow())
+		end
+	end
+end)
 
 local OldNamecall
 OldNamecall = hookmetamethod(game, "__namecall", function(Self, ...)
 	local Args = { ... }
 	if Settings.AutoPerfect
-	and tostring(Self) == "RemoteEvent"
-	and Args[1] == "RodActivated"
-	and type(Args[2]) == "table" then
+		and tostring(Self) == "RemoteEvent"
+		and Args[1] == "RodActivated"
+		and type(Args[2]) == "table" then
 		Args[2].LuckMulti = 99999
 		return OldNamecall(Self, unpack(Args))
 	end
@@ -144,23 +148,27 @@ task.spawn(function()
 			RemoteEvent:FireServer("GotFish", nil, Workspace:GetServerTimeNow())
 		end
 		if Settings.AutoCast then
-			RemoteEvent:FireServer("RodActivated", {
-				LuckMulti = 99999,
-				Mouse = {
-					Target = Workspace.World.Map.Holder.Water,
-					Hit = CFrame.new(Camera.CFrame.Position)
-				}
-			}, Workspace:GetServerTimeNow())
+			RemoteEvent:FireServer(
+				"RodActivated",
+				{
+					LuckMulti = 99999,
+					Mouse = {
+						Target = Workspace.World.Map.Holder.Water,
+						Hit = CFrame.new(Camera.CFrame.Position)
+					}
+				},
+				Workspace:GetServerTimeNow()
+			)
 		end
 	end
 end)
 
 local AutoFavorite: boolean = false
-local FavoriteBy: {string} = { "Rarity" }
-local SelectedRarities: {string} = { "Legendary" }
+local FavoriteBy: { string } = { "Rarity" }
+local SelectedRarities: { string } = { "Legendary" }
 local MinWeight: number = 35
 
-Inventory:Button({
+InventoryTab:Button({
 	Title = "Favorite All",
 	Desc = "",
 	Locked = false,
@@ -175,7 +183,7 @@ Inventory:Button({
 	end
 })
 
-Inventory:Button({
+InventoryTab:Button({
 	Title = "Unfavorite All",
 	Desc = "",
 	Locked = false,
@@ -190,7 +198,7 @@ Inventory:Button({
 	end
 })
 
-Inventory:Toggle({
+InventoryTab:Toggle({
 	Title = "Auto Favorite",
 	Type = "Checkbox",
 	Default = false,
@@ -199,7 +207,7 @@ Inventory:Toggle({
 	end
 })
 
-local FilterDropdown = Inventory:Dropdown({
+InventoryTab:Dropdown({
 	Title = "Favorite by",
 	Values = { "Rarity", "Weight" },
 	Value = { "Rarity" },
@@ -210,7 +218,7 @@ local FilterDropdown = Inventory:Dropdown({
 	end
 })
 
-local RarityDropdown = Inventory:Dropdown({
+InventoryTab:Dropdown({
 	Title = "Pick Rarities",
 	Values = { "Uncommon", "Common", "Rare", "Epic", "Legendary", "Mythical" },
 	Value = { "Legendary" },
@@ -221,7 +229,7 @@ local RarityDropdown = Inventory:Dropdown({
 	end
 })
 
-local WeightInput = Inventory:Input({
+InventoryTab:Input({
 	Title = "Put Weight",
 	Value = "35",
 	InputIcon = "weight",
