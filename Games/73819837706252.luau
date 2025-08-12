@@ -12,7 +12,6 @@ WindUI:SetTheme("Indigo")
 
 local Window = WindUI:CreateWindow({ Title = "Visionary.cc - " .. GameName, Icon = "home", Size = UDim2.fromOffset(400, 250), Theme = "Indigo" })
 
-
 local Settings = {
 	AutoCast = false,
 	AutoPerfect = true,
