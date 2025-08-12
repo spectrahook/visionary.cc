@@ -1,88 +1,119 @@
 local _VNY = shared
--- skids, please read the license. i know u dont read that at the first time
+
 local HttpService: HttpService = cloneref(game:GetService("HttpService"))
 local ReplicatedStorage: ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
-local GameName: string = Import(_VNY.Modules .. "Misc/GameName.luau")
+local Players: Players = cloneref(game:GetService("Players"))
+local Workspace: Workspace = cloneref(game:GetService("Workspace"))
 
+local LocalPlayer: Player = Players.LocalPlayer
+local GameName: string = Import(_VNY.Modules .. "Misc/GameName.luau")
 local RemoteEvent: RemoteEvent = ReplicatedStorage.Modules.Utility.Network.Events.RemoteEvent
 
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 WindUI.TransparencyValue = 0.8
 WindUI:SetTheme("Indigo")
 
-local Window = WindUI:CreateWindow({ Title = "Visionary.cc - " .. GameName, Icon = "home", Size = UDim2.fromOffset(400, 250), Theme = "Indigo" })
-
-local Settings = {
-	AutoCast = false,
-	AutoPerfect = true,
-	AutoReel = false
-}
-
-local Farming = Window:Tab({ Title = "Farming", Icon = "waves" })
-local Fishing = Farming:Section({ 
-    Title = "Fishing",
-    TextXAlignment = "Left",
-    TextSize = 17, -- Default Size
+local Window = WindUI:CreateWindow({
+    Title = "Visionary.cc - " .. GameName,
+    Icon = "home",
+    Size = UDim2.fromOffset(400, 250),
+    Theme = "Indigo"
 })
 
-local Shop = Window:Tab({ Title = "Shop", Icon = "shopping-bag" })
-local Sell = Shop:Section({ 
+local Settings = {
+    AutoCast = false,
+    AutoPerfect = true,
+    AutoReel = false
+}
+
+local FarmingTab = Window:Tab({
+    Title = "Farming",
+    Icon = "waves"
+})
+
+local FishingSection = FarmingTab:Section({
+    Title = "Fishing",
+    TextXAlignment = "Left",
+    TextSize = 17
+})
+
+local ShopTab = Window:Tab({
+    Title = "Shop",
+    Icon = "shopping-bag"
+})
+
+local SellSection = ShopTab:Section({
     Title = "Sell",
     TextXAlignment = "Left",
-    TextSize = 17, -- Default Size
+    TextSize = 17
 })
 
 Window:SelectTab(1)
-Farming:Toggle({ Title = "Auto Perfect",
-		Type = "Checkbox",
-		Default = Settings.AutoPerfect, 
-		Callback = function(v) 
-			Settings.AutoPerfect = v 
-		end 
-	})
-Farming:Toggle({
-		Title = "Auto Cast",
-		Type = "Checkbox", 
-		Default = Settings.AutoCast, 
-		Callback = function(v) 
-			Settings.AutoCast = v 
-			end 
-	})
-Farming:Toggle({
-		Title = "Instant Reel",
-		Type = "Checkbox", 
-		Default = Settings.AutoReel,
-		Callback = function(v) 
-			Settings.AutoReel = v 
-		end 
-	})
-	
-	local SellAll = Shop:Button({
+
+FarmingTab:Toggle({
+    Title = "Auto Perfect",
+    Type = "Checkbox",
+    Default = Settings.AutoPerfect,
+    Callback = function(Value)
+        Settings.AutoPerfect = Value
+    end
+})
+
+FarmingTab:Toggle({
+    Title = "Auto Cast",
+    Type = "Checkbox",
+    Default = Settings.AutoCast,
+    Callback = function(Value)
+        Settings.AutoCast = Value
+    end
+})
+
+FarmingTab:Toggle({
+    Title = "Instant Reel",
+    Type = "Checkbox",
+    Default = Settings.AutoReel,
+    Callback = function(Value)
+        Settings.AutoReel = Value
+    end
+})
+
+ShopTab:Button({
     Title = "Sell Your Inventory",
     Desc = "",
     Locked = false,
     Callback = function()
-        RemoteEvent:InvokeServer('SellInventory',workspace:GetServerTimeNow())
+        RemoteEvent:InvokeServer("SellInventory", Workspace:GetServerTimeNow())
     end
 })
 
-local Old
-Old = hookmetamethod(game, "__namecall", function(Self, ...)
-	local Arguments = { ... }
-	if Settings.AutoPerfect and tostring(Self) == "RemoteEvent" and Arguments[1] == "RodActivated" and type(Arguments[2]) == "table" then
-		Arguments[2].LuckMulti = 100
-		return Old(Self, unpack(Arguments))
-	end
-	return Old(Self, ...)
+local OldNamecall
+OldNamecall = hookmetamethod(game, "__namecall", function(Self, ...)
+    local Arguments = { ... }
+    if Settings.AutoPerfect
+    and tostring(Self) == "RemoteEvent"
+    and Arguments[1] == "RodActivated"
+    and type(Arguments[2]) == "table" then
+        Arguments[2].LuckMulti = 100
+        return OldNamecall(Self, unpack(Arguments))
+    end
+    return OldNamecall(Self, ...)
 end)
 
 task.spawn(function()
-	while task.wait() do
-		if Settings.AutoReel then
-			RemoteEvent:FireServer("GotFish", nil, workspace:GetServerTimeNow())
-		end
-		if Settings.AutoCast then
-			RemoteEvent:FireServer("RodActivated", { LuckMulti = 100, Mouse = { Target = workspace.World.Map.Holder.Water, Hit = CFrame.new(-608.8215, 444.0174, -167.3704) * CFrame.Angles(-2.5285, -0.15726, -3.03184) } }, workspace:GetServerTimeNow())
-		end
-	end
+    while task.wait() do
+        if Settings.AutoReel then
+            RemoteEvent:FireServer("GotFish", nil, Workspace:GetServerTimeNow())
+        end
+        if Settings.AutoCast then
+            local Camera = Workspace.CurrentCamera
+            local TargetCFrame = CFrame.new(Camera.CFrame.Position + Camera.CFrame.LookVector * 10)
+            RemoteEvent:FireServer("RodActivated", {
+                LuckMulti = 100,
+                Mouse = {
+                    Target = Workspace.World.Map.Holder.Water,
+                    Hit = TargetCFrame
+                }
+            }, Workspace:GetServerTimeNow())
+        end
+    end
 end)
