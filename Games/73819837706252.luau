@@ -11,7 +11,7 @@ WindUI.TransparencyValue = 0.8
 WindUI:SetTheme("Indigo")
 
 local Window = WindUI:CreateWindow({ Title = "Visionary.cc - " .. GameName, Icon = "home", Size = UDim2.fromOffset(400, 250), Theme = "Indigo" })
-Window:SelectTab(1)
+
 
 local Settings = {
 	AutoCast = false,
@@ -20,7 +20,7 @@ local Settings = {
 }
 
 local Farming = Window:Tab({ Title = "Farming", Icon = "waves" })
-
+Window:SelectTab(1)
 Farming:Toggle({ Title = "Auto Perfect",
 		Type = "Checkbox",
 		Default = Settings.AutoPerfect, 
