@@ -5,27 +5,11 @@ local Services = Import(_VNY.Modules .. "Misc/Services.luau")
 local Modules = Import(_VNY.Modules .. "FishGo/Modules.luau")
 local GameName: string = Import(_VNY.Modules .. "Misc/GameName.luau")
 
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
+WindUI.TransparencyValue = 0.8
+WindUI:SetTheme("Indigo")
 
-local Window = WindUI:CreateWindow({
-	Title = "Visionary.cc - " .. GameName,
-	Icon = "door-open",
-	Author = "liebertsx",
-	Folder = "Visionary.cc",
-	Size = UDim2.fromOffset(580, 460),
-	Transparent = true,
-	Theme = "Dark",
-	Resizable = true,
-	SideBarWidth = 200,
-	ScrollBarEnabled = true,
-	User = {
-		Enabled = true,
-		Anonymous = true,
-		Callback = function()
-			print("clicked")
-		end
-	}
-})
+local Window = WindUI:CreateWindow({ Title = "Visionary.cc - " .. GameName, Icon = "home", Size = UDim2.fromOffset(400, 250), Theme = "Indigo" })
 
 local Settings = {
 	AutoCast = false,
