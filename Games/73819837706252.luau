@@ -19,6 +19,19 @@ local Settings = {
 }
 
 local Farming = Window:Tab({ Title = "Farming", Icon = "waves" })
+local Fishing = Farming:Section({ 
+    Title = "Fishing",
+    TextXAlignment = "Left",
+    TextSize = 17, -- Default Size
+})
+
+local Shop = Window:Tab({ Title = "Shop", Icon = "shopping-bag" })
+local Sell = Shop:Section({ 
+    Title = "Sell",
+    TextXAlignment = "Left",
+    TextSize = 17, -- Default Size
+})
+
 Window:SelectTab(1)
 Farming:Toggle({ Title = "Auto Perfect",
 		Type = "Checkbox",
@@ -43,6 +56,15 @@ Farming:Toggle({
 			Settings.AutoReel = v 
 		end 
 	})
+	
+	local SellAll = Shop:Button({
+    Title = "Sell Your Inventory",
+    Desc = "",
+    Locked = false,
+    Callback = function()
+        RemoteEvent:InvokeServer('SellInventory',workspace:GetServerTimeNow())
+    end
+})
 
 local Old
 Old = hookmetamethod(game, "__namecall", function(Self, ...)
