@@ -1,5 +1,5 @@
 local _VNY = shared
-
+-- skids, please read the license. i know u dont read that at the first time
 local HttpService: HttpService = cloneref(game:GetService("HttpService"))
 local ReplicatedStorage: ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
 local GameName: string = Import(_VNY.Modules .. "Misc/GameName.luau")
