@@ -1,8 +1,11 @@
 local _VNY = shared
-local WindUI = fetch.load("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua")
-local Modules = Import(_VNY.Modules .. "FishGo/Modules.luau")
+
+local HttpService: HttpService = cloneref(game:GetService("HttpService"))
 local Services = Import(_VNY.Modules .. "Misc/Services.luau")
-local GameName = Import(_VNY.Modules .. "Misc/GameName.luau")
+local Modules = Import(_VNY.Modules .. "FishGo/Modules.luau")
+local GameName: string = Import(_VNY.Modules .. "Misc/GameName.luau")
+
+local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
 
 local Window = WindUI:CreateWindow({
 	Title = "Visionary.cc - " .. GameName,
@@ -30,48 +33,28 @@ local Settings = {
 	AutoReel = false
 }
 
-local Farming = Window:Tab({
-	Title = "Farming",
-	Icon = "waves",
-	Locked = false
-})
-
+local Farming = Window:Tab({ Title = "Farming", Icon = "waves" })
 Window:SelectTab(1)
-
-local Fishing = Farming:Section({
-	Title = "Fishing",
-	TextXAlignment = "Left",
-	TextSize = 17
-})
 
 local AutoPerfect = Farming:Toggle({
 	Title = "Auto Perfect",
-	Desc = "",
 	Type = "Checkbox",
 	Default = Settings.AutoPerfect,
-	Callback = function(v)
-		Settings.AutoPerfect = v
-	end
+	Callback = function(v) Settings.AutoPerfect = v end
 })
 
 local AutoCast = Farming:Toggle({
 	Title = "Auto Cast",
-	Desc = "",
 	Type = "Checkbox",
 	Default = Settings.AutoCast,
-	Callback = function(v)
-		Settings.AutoCast = v
-	end
+	Callback = function(v) Settings.AutoCast = v end
 })
 
 local InstantReel = Farming:Toggle({
 	Title = "Instant Reel",
-	Desc = "",
 	Type = "Checkbox",
 	Default = Settings.AutoReel,
-	Callback = function(v)
-		Settings.AutoReel = v
-	end
+	Callback = function(v) Settings.AutoReel = v end
 })
 
 local Old
@@ -94,7 +77,7 @@ end)
 task.spawn(function()
 	while task.wait() do
 		if Settings.AutoCast then
-			Modules:Fire("RodActivated", { LuckMulti = 100, Mouse = { Target = workspace.World.Map.Holder.Water, Hit = CFrame.new(-608.821533203125, 444.0174560546875, -167.37042236328125) * CFrame.Angles(-2.5284948348999023, -0.15726494789123535, -3.031848669052124) } }, workspace:GetServerTimeNow())
+			Modules:Fire("RodActivated", { LuckMulti = 100, Mouse = { Target = workspace.World.Map.Holder.Water, Hit = CFrame.new(-608.8215, 444.0174, -167.3704) * CFrame.Angles(-2.5285, -0.15726, -3.03184) } }, workspace:GetServerTimeNow())
 		end
 	end
 end)
