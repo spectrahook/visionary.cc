@@ -1,5 +1,5 @@
 local _VNY = shared
-
+-- read the license
 local HttpService: HttpService = cloneref(game:GetService("HttpService"))
 local ReplicatedStorage: ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
 local Players: Players = cloneref(game:GetService("Players"))
@@ -92,7 +92,7 @@ OldNamecall = hookmetamethod(game, "__namecall", function(Self, ...)
     if Settings.AutoPerfect
     and tostring(Self) == "RemoteEvent"
     and Arguments[1] == "RodActivated"
-    and type(Arguments[2]) == "table" then
+    and type(Arguments[2]) == "table" then -- idk why i use newline
         Arguments[2].LuckMulti = 100
         return OldNamecall(Self, unpack(Arguments))
     end
