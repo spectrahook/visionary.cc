@@ -11,6 +11,9 @@ local GameList = {
 	},
 	['Poop A Brainrot'] = {
 		PlaceId = 82321750197896;
+	},
+	['Fish Go'] = {
+		PlaceId = 73819837706252;
 	}
 }
 
