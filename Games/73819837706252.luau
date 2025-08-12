@@ -1,13 +1,16 @@
 local _VNY = shared
 -- read the license
+-- i dont use services rn
 local HttpService: HttpService = cloneref(game:GetService("HttpService"))
 local ReplicatedStorage: ReplicatedStorage = cloneref(game:GetService("ReplicatedStorage"))
 local Players: Players = cloneref(game:GetService("Players"))
 local Workspace: Workspace = cloneref(game:GetService("Workspace"))
+local Camera = Workspace.CurrentCamera
 
 local LocalPlayer: Player = Players.LocalPlayer
 local GameName: string = Import(_VNY.Modules .. "Misc/GameName.luau")
 local RemoteEvent: RemoteEvent = ReplicatedStorage.Modules.Utility.Network.Events.RemoteEvent
+local RemoteFunction: RemoteEvent = ReplicatedStorage.Modules.Utility.Network.Functions.RemoteFunction
 
 local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 WindUI.TransparencyValue = 0.8
@@ -82,7 +85,7 @@ ShopTab:Button({
     Desc = "",
     Locked = false,
     Callback = function()
-        RemoteEvent:InvokeServer("SellInventory", Workspace:GetServerTimeNow())
+        RemoteFunction:InvokeServer("SellInventory",nil, Workspace:GetServerTimeNow())
     end
 })
 
@@ -105,13 +108,11 @@ task.spawn(function()
             RemoteEvent:FireServer("GotFish", nil, Workspace:GetServerTimeNow())
         end
         if Settings.AutoCast then
-            local Camera = Workspace.CurrentCamera
-            local TargetCFrame = CFrame.new(Camera.CFrame.Position + Camera.CFrame.LookVector * 10)
             RemoteEvent:FireServer("RodActivated", {
                 LuckMulti = 100,
                 Mouse = {
                     Target = Workspace.World.Map.Holder.Water,
-                    Hit = TargetCFrame
+                    Hit = CFrame.new(Camera.CFrame.Position)
                 }
             }, Workspace:GetServerTimeNow())
         end
