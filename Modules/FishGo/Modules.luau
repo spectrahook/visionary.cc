@@ -1,3 +1,5 @@
+local _VNY = shared
+
 local Services = Import(_VNY.Modules .. 'Misc/Services.luau')
 local Remote: RemoteEvent = Services.ReplicatedStorage.Modules.Utility.Network.Events.RemoteEvent
 
