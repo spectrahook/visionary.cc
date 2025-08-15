@@ -14,6 +14,9 @@ local GameList = {
 	},
 	['Fish Go'] = {
 		PlaceId = 73819837706252;
+	},
+	['Fish It'] = {
+		PlaceId = 121864768012064;
 	}
 }
 
